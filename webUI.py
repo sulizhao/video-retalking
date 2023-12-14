@@ -1,6 +1,8 @@
 import random
 import subprocess
 import os
+import sys
+
 import gradio
 import gradio as gr
 import shutil
@@ -18,10 +20,12 @@ def convert(segment_length, video, audio, progress=gradio.Progress()):
         audio_segments = cut_audio_segments(audio, segment_length)
     else:
         video_path = os.path.join('temp/video', os.path.basename(video))
-        shutil.move(video, video_path)
+        # shutil.move(video, video_path)
+        video_path = video
         video_segments = [video_path]
         audio_path = os.path.join('temp/audio', os.path.basename(audio))
-        shutil.move(audio, audio_path)
+        # shutil.move(audio, audio_path)
+        audio_path = audio
         audio_segments = [audio_path]
 
     processed_segments = []
@@ -75,7 +79,7 @@ def cut_audio_segments(audio_file, segment_length):
 
 def process_segment(video_seg, audio_seg, i):
     output_file = f"results/{random.randint(10,100000)}_{i}.mp4"
-    command = ["python", "inference.py", "--face", video_seg,
+    command = [f"{sys.executable}", "inference.py", "--face", video_seg,
                "--audio", audio_seg, "--outfile", output_file]
     subprocess.run(command, check=True)
 

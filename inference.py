@@ -278,7 +278,7 @@ def main():
 # frames:256x256, full_frames: original size
 def datagen(frames, mels, full_frames, frames_pil, cox):
     img_batch, mel_batch, frame_batch, coords_batch, ref_batch, full_frame_batch = [], [], [], [], [], []
-    base_name = args.face.split('/')[-1]
+    base_name = os.path.splitext(os.path.basename(args.face))[0]
     refs = []
     image_size = 256 
 
