@@ -38,7 +38,7 @@ def main():
     restorer = GFPGANer(model_path='checkpoints/GFPGANv1.3.pth', upscale=1, arch='clean', \
                         channel_multiplier=2, bg_upsampler=None)
 
-    base_name = args.face.split('/')[-1]
+    base_name = os.path.splitext(os.path.basename(args.face))[0]
     if os.path.isfile(args.face) and args.face.split('.')[1] in ['jpg', 'png', 'jpeg']:
         args.static = True
     if not os.path.isfile(args.face):
