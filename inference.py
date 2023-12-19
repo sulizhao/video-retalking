@@ -28,7 +28,10 @@ warnings.filterwarnings("ignore")
 
 args = options()
 
-def main():    
+def main(face_path, audio_path, output_file):
+    args.face = face_path
+    args.audio = audio_path
+    args.outfile = output_file
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print('[Info] Using {} for inference.'.format(device))
     os.makedirs(os.path.join('temp', args.tmp_dir), exist_ok=True)

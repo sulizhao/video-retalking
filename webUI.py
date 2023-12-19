@@ -7,6 +7,8 @@ import gradio
 import gradio as gr
 import shutil
 
+import inference
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -19,11 +21,11 @@ def convert(segment_length, video, audio, progress=gradio.Progress()):
         video_segments = cut_video_segments(video, segment_length)
         audio_segments = cut_audio_segments(audio, segment_length)
     else:
-        video_path = os.path.join('temp/video', os.path.basename(video))
+        # video_path = os.path.join('temp/video', os.path.basename(video))
         # shutil.move(video, video_path)
         video_path = video
         video_segments = [video_path]
-        audio_path = os.path.join('temp/audio', os.path.basename(audio))
+        # audio_path = os.path.join('temp/audio', os.path.basename(audio))
         # shutil.move(audio, audio_path)
         audio_path = audio
         audio_segments = [audio_path]
@@ -77,12 +79,12 @@ def cut_audio_segments(audio_file, segment_length):
     return audio_segments
 
 
-def process_segment(video_seg, audio_seg, i):
+def     process_segment(video_seg, audio_seg, i):
     output_file = f"results/{random.randint(10,100000)}_{i}.mp4"
-    command = [f"{sys.executable}", "inference.py", "--face", video_seg,
-               "--audio", audio_seg, "--outfile", output_file]
-    subprocess.run(command, check=True)
-
+    # command = [f"{sys.executable}", "inference.py", "--face", video_seg,
+    #            "--audio", audio_seg, "--outfile", output_file]
+    # subprocess.run(command, check=True)
+    inference.main(face_path=video_seg, audio_path=audio_seg, output_file=output_file)
     return output_file
 
 
@@ -112,7 +114,7 @@ with gradio.Blocks(
                     label="segment length (Second), 0 for no segmentation")
             with gradio.Row():
                 with gradio.Column():
-                    v = gradio.Video(label='SOurce Face')
+                    v = gradio.File(label='SOurce Face')
 
                 with gradio.Column():
                     a = gradio.Audio(
