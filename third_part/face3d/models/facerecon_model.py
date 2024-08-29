@@ -3,13 +3,13 @@
 
 import numpy as np
 import torch
-from face3d.models.base_model import BaseModel
-from face3d.models import networks
-from face3d.models.bfm import ParametricFaceModel
-from face3d.models.losses import perceptual_loss, photo_loss, reg_loss, reflectance_loss, landmark_loss
-from face3d.util import util 
-from face3d.util.nvdiffrast import MeshRenderer
-from face3d.util.preprocess import estimate_norm_torch
+from tools.videoretalking.third_part.face3d.models.base_model import BaseModel
+from tools.videoretalking.third_part.face3d.models import networks
+from tools.videoretalking.third_part.face3d.models.bfm import ParametricFaceModel
+from tools.videoretalking.third_part.face3d.models.losses import perceptual_loss, photo_loss, reg_loss, reflectance_loss, landmark_loss
+from tools.videoretalking.third_part.face3d.util import util
+from tools.videoretalking.third_part.face3d.util.nvdiffrast import MeshRenderer
+from tools.videoretalking.third_part.face3d.util.preprocess import estimate_norm_torch
 
 import trimesh
 from scipy.io import savemat

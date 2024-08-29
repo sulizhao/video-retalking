@@ -2,12 +2,12 @@ import numpy as np
 import cv2, argparse, torch
 import torchvision.transforms.functional as TF
 
-from models import load_network, load_DNet
+from tools.videoretalking.models import load_network, load_DNet
 from tqdm import tqdm
 from PIL import Image
 from scipy.spatial import ConvexHull
-from third_part import face_detection
-from third_part.face3d.models import networks
+from tools.videoretalking.third_part import face_detection
+from tools.videoretalking.third_part.face3d.models import networks
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -15,10 +15,10 @@ warnings.filterwarnings("ignore")
 def options():
     parser = argparse.ArgumentParser(description='Inference code to lip-sync videos in the wild using Wav2Lip models')
 
-    parser.add_argument('--DNet_path', type=str, default='checkpoints/DNet.pt')
-    parser.add_argument('--LNet_path', type=str, default='checkpoints/LNet.pth')
-    parser.add_argument('--ENet_path', type=str, default='checkpoints/ENet.pth') 
-    parser.add_argument('--face3d_net_path', type=str, default='checkpoints/face3d_pretrain_epoch_20.pth')                      
+    parser.add_argument('--DNet_path', type=str, default='/checkpoints/DNet.pt')
+    parser.add_argument('--LNet_path', type=str, default='/checkpoints/LNet.pth')
+    parser.add_argument('--ENet_path', type=str, default='/checkpoints/ENet.pth')
+    parser.add_argument('--face3d_net_path', type=str, default='/checkpoints/face3d_pretrain_epoch_20.pth')
     # parser.add_argument('--face', type=str, help='Filepath of video/image that contains faces to use', required=True)
     # parser.add_argument('--audio', type=str, help='Filepath of video/audio file to use as raw audio source', required=True)
     parser.add_argument('--exp_img', type=str, help='Expression template. neutral, smile or image path', default='neutral')

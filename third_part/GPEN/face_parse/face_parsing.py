@@ -6,10 +6,10 @@ import os
 import cv2
 import torch
 import numpy as np
-from face_parse.parse_model import ParseNet
+from tools.videoretalking.third_part.GPEN.face_parse.parse_model import ParseNet
 import torch.nn.functional as F
 
-from face_parse.model import BiSeNet
+from tools.videoretalking.third_part.GPEN.face_parse.model import BiSeNet
 import torchvision.transforms as transforms
 
 class FaceParse(object):

@@ -132,18 +132,8 @@ class Predictor(BasePredictor):
         full_frames_RGB = [
             cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) for frame in full_frames
         ]
-        full_frames_RGB, crop, quad = self.croper.crop(full_frames_RGB, xsize=512)
+        full_frames_RGB, coods = self.croper.crop(full_frames_RGB, xsize=512)
 
-        clx, cly, crx, cry = crop
-        lx, ly, rx, ry = quad
-        lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
-        oy1, oy2, ox1, ox2 = (
-            cly + ly,
-            min(cly + ry, full_frames[0].shape[0]),
-            clx + lx,
-            min(clx + rx, full_frames[0].shape[1]),
-        )
-        # original_size = (ox2 - ox1, oy2 - oy1)
         frames_pil = [
             Image.fromarray(cv2.resize(frame, (256, 256))) for frame in full_frames_RGB
         ]
@@ -311,7 +301,7 @@ class Predictor(BasePredictor):
             )
             imgs_enhanced.append(pred)
         gen = datagen(
-            imgs_enhanced.copy(), mel_chunks, full_frames, args, (oy1, oy2, ox1, ox2)
+            imgs_enhanced.copy(), mel_chunks, full_frames, args, coods
         )
 
         frame_h, frame_w = full_frames[0].shape[:-1]
@@ -471,12 +461,12 @@ def datagen(frames, mels, full_frames, args, cox):
     ]
     del kp_extractor.detector
 
-    oy1, oy2, ox1, ox2 = cox
     face_det_results = face_detect(full_frames, args, jaw_correction=True)
 
-    for inverse_transform, crop, full_frame, face_det in zip(
-        inverse_transforms, crops, full_frames, face_det_results
+    for inverse_transform, crop, full_frame, face_det, cox1 in zip(
+        inverse_transforms, crops, full_frames, face_det_results, cox
     ):
+        oy1,oy2,ox1,ox2 = cox1[0], cox1[1], cox1[2], cox1[3]
         imc_pil = paste_image(
             inverse_transform,
             crop,

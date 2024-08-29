@@ -126,15 +126,30 @@ class Croper:
         if lm is None:
             return None
         
-        crop, quad = self.align_face(img=Image.fromarray(img_np), lm=lm, output_size=xsize)
-        clx, cly, crx, cry = crop
-        lx, ly, rx, ry = quad
-        lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
+        # crop, quad = self.align_face(img=Image.fromarray(img_np), lm=lm, output_size=xsize)
+        # clx, cly, crx, cry = crop
+        # lx, ly, rx, ry = quad
+        # lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
+        coods = []
         for _i in range(len(img_np_list)):
             _inp = img_np_list[_i]
-            _inp = _inp[cly:cry, clx:crx]
-            _inp = _inp[ly:ry, lx:rx]
-            img_np_list[_i] = _inp
-        return img_np_list, crop, quad
+            lm = self.get_landmark(_inp)
+            if lm is not None:
+                crop, quad = self.align_face(img=Image.fromarray(_inp), lm=lm, output_size=xsize)
+                clx, cly, crx, cry = crop
+                lx, ly, rx, ry = quad
+                lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
+            # _inp = _inp[cly:cry, clx:crx]
+            # _inp = _inp[ly:ry, lx:rx]
+            # img_np_list[_i] = _inp
+                oy1, oy2, ox1, ox2 = cly + ly, min(cly + ry, img_np_list[_i].shape[0]), clx + lx, min(clx + rx,
+                                                                                                     img_np_list[_i].shape[
+                                                                                                         1])
+                img_np_list[_i] = _inp[oy1:oy2, ox1:ox2]
+                coods.append([oy1, oy2, ox1, ox2])
+            else:
+                img_np_list[_i] = _inp[oy1:oy2, ox1:ox2]
+                coods.append([oy1, oy2, ox1, ox2])
+        return img_np_list, coods
 
 
